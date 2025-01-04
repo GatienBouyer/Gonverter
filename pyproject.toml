@@ -1,0 +1,56 @@
+[project]
+name = "Gonverter"
+version = "0.0.1"
+description = "Tkinter convertion application"
+keywords = []
+authors = [
+    {name="Gatien Bouyer"},
+]
+readme = "README.md"
+license = {text = "MIT License"}
+requires-python = ">=3.10"
+dependencies = [
+]
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Operating System :: OS Independent",
+    "Development Status :: 2 - Pre-Alpha",
+]
+
+[project.urls]
+"Bug Tracker" = "https://github.com/GatienBouyer/Gonverter/issues"
+"Source" = "https://github.com/GatienBouyer/Gonverter"
+
+[project.optional-dependencies]
+dev = [
+    "mypy",
+    "isort",
+    "autopep8",
+    "pylint",
+]
+
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[tool.isort]
+multi_line_output = 3
+
+[tool.autopep8]
+max_line_length = 100
+
+[tool.mypy]
+strict = true
+
+[tool.pylint]
+disable=[
+    "locally-disabled",
+    "file-ignored",
+    "suppressed-message",
+    "use-implicit-booleaness-not-comparison-to-string",
+    "use-implicit-booleaness-not-comparison-to-zero",
+    "logging-fstring-interpolation",
+]
