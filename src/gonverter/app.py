@@ -6,12 +6,16 @@ import tkinter
 from tkinter import scrolledtext
 from tkinter import ttk
 
+from gonverter import base64
+
 logger = logging.getLogger(__name__)
 
 
 class App:
     """Main application."""
     root: tkinter.Tk
+    text_input: scrolledtext.ScrolledText
+    text_output: scrolledtext.ScrolledText
 
     def __init__(self) -> None:
         self.root = self.create_root()
@@ -38,11 +42,27 @@ class App:
         frame.grid_rowconfigure(index=1, weight=1)
         label_input = ttk.Label(frame, text="Your text", padding=5)
         label_input.grid(column=0, row=0)
-        text_input = scrolledtext.ScrolledText(frame)
-        text_input.grid(column=0, row=1, sticky="NSWE", padx=5, pady=5)
+        self.text_input = scrolledtext.ScrolledText(frame)
+        self.text_input.grid(column=0, row=1, sticky="nswe", padx=5, pady=5)
         label_output = ttk.Label(frame, text="Result", padding=5)
         label_output.grid(column=1, row=0)
-        text_output = scrolledtext.ScrolledText(frame, state="disabled")
-        text_output.grid(column=1, row=1, sticky="NSWE", padx=5, pady=5)
-        convert_button = ttk.Button(frame, text="Convert", padding=5)
+        self.text_output = scrolledtext.ScrolledText(frame, state="disabled")
+        self.text_output.grid(column=1, row=1, sticky="nswe", padx=5, pady=5)
+        convert_button = ttk.Button(frame, text="Convert", padding=5, command=self.cmd_convert)
         convert_button.grid(column=0, columnspan=2, row=2)
+
+    def cmd_convert(self) -> None:
+        """
+        Update the text of the text_output by converting the text from the text_input.
+        Command called by the convert button.
+        """
+        text = self.text_input.get("0.0", "end")
+        text = text[:-1]  # remove the last \n character
+        logger.info(f"Convert from {'utf-8'} to {'base64'}")
+        logger.debug(f"Converting {'utf-8'} text: {text}")
+        result = base64.utf8_to_base64(text)
+        logger.debug(f"Converted into {'base64'}: {result}")
+        self.text_output.configure(state="normal")
+        self.text_output.delete("0.0", "end")
+        self.text_output.insert("end", result)
+        self.text_output.configure(state="disabled")

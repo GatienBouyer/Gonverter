@@ -1,7 +1,7 @@
 [project]
 name = "Gonverter"
 version = "0.0.1"
-description = "Tkinter convertion application"
+description = "Tkinter conversion application"
 keywords = []
 authors = [
     {name="Gatien Bouyer"},
