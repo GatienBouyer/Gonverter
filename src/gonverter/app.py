@@ -1,9 +1,12 @@
 """
 Definition of the application UI.
 """
+import logging
 import tkinter
 from tkinter import scrolledtext
 from tkinter import ttk
+
+logger = logging.getLogger(__name__)
 
 
 class App:
