@@ -44,6 +44,12 @@ repos:
             types_or: [python, pyi]
             require_serial: true
             args: ["--scripts-are-modules"]
+          - id: unittest
+            name: unit tests
+            entry: python -m unittest
+            language: system
+            pass_filenames: false
+            verbose: true
           - id: pylint
             name: pylint
             entry: pylint
