@@ -42,13 +42,14 @@ class App:
         frame.grid_rowconfigure(index=1, weight=1)
         label_input = ttk.Label(frame, text="Your text", padding=5)
         label_input.grid(column=0, row=0)
-        self.text_input = scrolledtext.ScrolledText(frame)
+        self.text_input = scrolledtext.ScrolledText(frame, name="input_text")
         self.text_input.grid(column=0, row=1, sticky="nswe", padx=5, pady=5)
         label_output = ttk.Label(frame, text="Result", padding=5)
         label_output.grid(column=1, row=0)
-        self.text_output = scrolledtext.ScrolledText(frame, state="disabled")
+        self.text_output = scrolledtext.ScrolledText(frame, state="disabled", name="output_text")
         self.text_output.grid(column=1, row=1, sticky="nswe", padx=5, pady=5)
-        convert_button = ttk.Button(frame, text="Convert", padding=5, command=self.cmd_convert)
+        convert_button = ttk.Button(frame, text="Convert", padding=5,
+                                    command=self.cmd_convert, name="convert_button")
         convert_button.grid(column=0, columnspan=2, row=2)
 
     def cmd_convert(self) -> None:

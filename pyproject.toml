@@ -53,4 +53,5 @@ disable=[
     "use-implicit-booleaness-not-comparison-to-string",
     "use-implicit-booleaness-not-comparison-to-zero",
     "logging-fstring-interpolation",
+	"too-few-public-methods",
 ]

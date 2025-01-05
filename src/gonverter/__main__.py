@@ -38,10 +38,10 @@ logging_config = {
 
 def main() -> None:
     """Entry point of the application."""
-    logging.config.dictConfig(logging_config)
     application = app.App()
     application.root.mainloop()
 
 
 if __name__ == "__main__":
+    logging.config.dictConfig(logging_config)
     main()

@@ -46,9 +46,16 @@ repos:
             args: ["--scripts-are-modules"]
           - id: unittest
             name: unit tests
-            entry: python -m unittest
+            entry: python -m unittest discover --start-directory tests
             language: system
-            types_or: [python]
+            always_run: true
+            pass_filenames: false
+            require_serial: true
+          - id: end2endtest
+            name: end-to-end tests
+            entry: python -m unittest discover --start-directory tests_end_to_end
+            language: system
+            always_run: true
             pass_filenames: false
             require_serial: true
           - id: pylint
