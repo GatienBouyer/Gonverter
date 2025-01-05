@@ -10,9 +10,8 @@ from gonverter import app
 
 def main() -> None:
     """Entry point of the application."""
-    root = app.create_root()
-    app.create_ui(root)
-    root.mainloop()
+    application = app.App()
+    application.root.mainloop()
 
 
 if __name__ == "__main__":
