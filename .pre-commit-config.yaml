@@ -48,8 +48,9 @@ repos:
             name: unit tests
             entry: python -m unittest
             language: system
+            types_or: [python]
             pass_filenames: false
-            verbose: true
+            require_serial: true
           - id: pylint
             name: pylint
             entry: pylint
