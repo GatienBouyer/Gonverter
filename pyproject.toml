@@ -30,6 +30,7 @@ dev = [
     "isort",
     "autopep8",
     "pylint",
+    "coverage",
 ]
 
 [build-system]
@@ -53,5 +54,18 @@ disable=[
     "use-implicit-booleaness-not-comparison-to-string",
     "use-implicit-booleaness-not-comparison-to-zero",
     "logging-fstring-interpolation",
-	"too-few-public-methods",
+    "too-few-public-methods",
 ]
+
+[tool.coverage.run]
+branch = true
+command_line = "-m unittest discover"
+source_pkgs = [
+    "gonverter",
+]
+
+[tool.coverage.report]
+exclude_also = [
+    "if __name__ == .__main__.:",
+]
+fail_under=100
