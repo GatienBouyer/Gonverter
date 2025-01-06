@@ -47,11 +47,11 @@ class Runner:
     Fonctionnalities to run a scenario of actions inside a tkinter application.
     """
 
-    debug_keep_window = False
+    debug_keep_window: bool
     """
     Whether to keep the window open or not at the end of the scenario when
     the application wasn't close or when a mainloop is launched without a scenario set."""
-    debug_sleep_time = 0
+    debug_sleep_time: float
     """
     Time in seconds waited between scenario actions to let the user see
     the effects and the progress of the scenario.
@@ -90,11 +90,18 @@ class Runner:
         """Used to disable tkinter.messagebox with which we can't interact."""
         logger.info(f"skip dialog {options}")
 
-    def __init__(self, scenario: Scenario) -> None:
+    def __init__(
+        self,
+        scenario: Scenario,
+        debug_sleep_time: float = 0,
+        debug_keep_window: bool = False,
+    ) -> None:
         cls = self.__class__
         cls.scenario = scenario
         cls.step_idx = 0
         cls.alive = False
+        cls.debug_sleep_time = debug_sleep_time
+        cls.debug_keep_window = debug_keep_window
 
     def run(self, launch_app: abc.Callable[[], None]) -> None:
         """Launch the application and check that the scenario ran until completion."""
