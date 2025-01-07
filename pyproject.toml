@@ -39,15 +39,22 @@ build-backend = "setuptools.build_meta"
 
 [tool.isort]
 force_single_line = true
+skip_gitignore = true
+quiet = true  # to remove warning about skipped files
 
 [tool.autopep8]
 max_line_length = 100
+recursive = true
+exclude = ".*"  # exclude hidden files
 
 [tool.mypy]
 strict = true
+files = ["src", "tests", "tests_end_to_end"]
 
 [tool.pylint]
-disable=[
+recursive = true
+ignore-patterns = ["^\\."]  # exclude hidden files
+disable = [
     "locally-disabled",
     "file-ignored",
     "suppressed-message",
@@ -68,4 +75,4 @@ source_pkgs = [
 exclude_also = [
     "if __name__ == .__main__.:",
 ]
-fail_under=100
+fail_under = 100

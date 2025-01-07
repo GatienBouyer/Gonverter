@@ -43,34 +43,10 @@ repos:
             language: system
             types_or: [python, pyi]
             args: ["--scripts-are-modules"]
-          - id: pylint
-            name: pylint
-            entry: pylint
-            language: system
-            types_or: [python]
-            args: [
-              "-rn", # Only display the messages
-              "-sn", # Don't display the score
-            ]
-            stages: [manual]
           - id: unittest
-            name: unit tests
-            entry: python -m unittest discover --start-directory tests
+            name: unittest
+            entry: python -m unittest discover tests
             language: system
             always_run: true
             pass_filenames: false
             fail_fast: true
-          - id: end2endtest
-            name: end-to-end tests
-            entry: python -m unittest discover --start-directory tests_end_to_end
-            language: system
-            always_run: false
-            pass_filenames: false
-            stages: [manual]
-            fail_fast: true
-          - id: coverage
-            name: coverage
-            entry: sh -c "coverage run > /dev/null ; coverage report"
-            language: system
-            pass_filenames: false
-            stages: [manual]
