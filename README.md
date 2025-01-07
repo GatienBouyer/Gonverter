@@ -40,3 +40,9 @@ Collect the coverage: `coverage run` and then `coverage report` or `coverage htm
 - import sorting: `isort . --interactive`
 - type annotations: `mypy`
 - code smells: `pylint ./`
+
+### Build the documentation
+
+- `pip install -e .[doc]`
+- `sphinx-build -b html docs/ docs/build/html`
+- `firefox docs/build/html/index.html`

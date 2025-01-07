@@ -32,6 +32,14 @@ dev = [
     "pylint",
     "coverage",
 ]
+doc = [
+    "sphinx",
+    "sphinx-autoapi",
+]
+build = [
+    "build",
+    "twine",
+]
 
 [build-system]
 requires = ["setuptools>=61.0"]
