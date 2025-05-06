@@ -14,7 +14,7 @@ logging_config = {
     "disable_existing_loggers": False,
     "formatters": {
         "simple": {
-            "format": "%(asctime)s %(levelname)s %(name)s: %(message)s",
+            "format": "%(asctime)s %(levelname)s %(name)s l%(lineno)s: %(message)s",
             "datefmt": "%Y-%m-%dT%H:%M:%S%z",
         },
     },
@@ -27,12 +27,11 @@ logging_config = {
     },
     "loggers": {
         "root": {
-            "level": "DEBUG",
+            "level": "INFO",
             "handlers": [
                 "stdout",
             ],
         },
-        "tkinter_test_util.runner": {"level": "INFO"},
     },
 }
 

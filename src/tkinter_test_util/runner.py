@@ -20,13 +20,16 @@ Maximum number of events executed after each actions. Used to prevent infinite l
 
 
 original_mainloop = tkinter.Misc.mainloop
+"""Original mainloop function of tkinter that will be
+replaced by :py:meth:`TkRunner.mock_mainloop`"""
+
 # There are only two way to exit a tkinter app:
 # Misc.quit and Tk.destroy, Misc.destroy doesn't exit the app.
 original_quit = tkinter.Misc.quit
 original_destroy = tkinter.Tk.destroy
 
-
-Scenario: typing.TypeAlias = abc.Sequence[abc.Callable[[tkinter.Misc], None]]
+Action: typing.TypeAlias = abc.Callable[[tkinter.Misc], None]
+Scenario: typing.TypeAlias = abc.Sequence[Action]
 
 
 class ScenarioNotEndedError(Exception):
@@ -93,6 +96,7 @@ class Runner:
     def __init__(
         self,
         scenario: Scenario,
+        debug_log: bool = False,
         debug_sleep_time: float = 0,
         debug_keep_window: bool = False,
     ) -> None:
@@ -102,12 +106,14 @@ class Runner:
         cls.alive = False
         cls.debug_sleep_time = debug_sleep_time
         cls.debug_keep_window = debug_keep_window
+        if debug_log:
+            logger.setLevel(logging.DEBUG)
 
     def run(self, launch_app: abc.Callable[[], None]) -> None:
         """Launch the application and check that the scenario ran until completion."""
         if logger.isEnabledFor(logging.DEBUG):
             for i, action in enumerate(self.scenario):
-                logger.debug(f"Scenario step {i}: {action.__name__}")
+                logger.debug(f"Scenario step {i}: {self._repr_action(action)}")
         with (
             mock.patch("tkinter.Misc.mainloop", Runner.mock_mainloop),
             mock.patch("tkinter.Misc.quit", Runner.mock_quit),
@@ -119,15 +125,39 @@ class Runner:
             raise ScenarioNotEndedError(
                 f"Scenario did not run fully: {self.step_idx} / {len(self.scenario)}")
 
+    @staticmethod
+    def _repr_action(action: Action) -> str:
+        if action.__closure__ is None:
+            return f"<{action.__qualname__}>"
+        context = "".join(
+            f"{varname}={varvalue.cell_contents}"
+            for varname, varvalue
+            in zip(action.__code__.co_freevars, action.__closure__)
+        )
+        return f"<{action.__qualname__} {context}>"
+
     @classmethod
     def mainloop(cls, root: tkinter.Misc) -> None:
         """Our implementation of a tkinter mainloop that run the defined scenario."""
+
+        # Let the application start up fully before running the scaneio
+        # The application could close itself without any scenario.
+        cls.pump_events(root)
+
         logger.info(f"Run scenario on {root}")
         while cls.alive and cls.step_idx < len(cls.scenario):
             action = cls.scenario[cls.step_idx]
-            logger.debug(f"Run action {cls.step_idx}: {action.__name__}")
+            if logger.isEnabledFor(logging.DEBUG):
+                logger.debug(f"Run action {cls.step_idx}: {cls._repr_action(action)}")
             cls.step_idx += 1
-            action(root)
+
+            try:
+                action(root)
+            except BaseException as err:
+                logger.info(f"scenario crashed, close the application")
+                root.destroy()
+                raise err
+
             cls.pump_events(root)
             if cls.debug_sleep_time:
                 print("-sleep-", end="\r")
@@ -151,6 +181,6 @@ class Runner:
     def pump_events(cls, root: tkinter.Misc) -> None:
         """Update the tkinter application: draw elements, call callbacks, etc.
         like the tkinter mainloop would do."""
-        infinite = MAX_TKINTER_UPDATE
-        while root.tk.dooneevent(_tkinter.ALL_EVENTS | _tkinter.DONT_WAIT) and infinite:
-            infinite -= 1  # to prevent infinite loop
+        limit = MAX_TKINTER_UPDATE
+        while root.tk.dooneevent(_tkinter.ALL_EVENTS | _tkinter.DONT_WAIT) and limit:
+            limit -= 1  # to prevent infinite loop

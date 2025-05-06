@@ -2,6 +2,7 @@
 
 import tkinter.ttk
 import typing
+from dataclasses import dataclass
 
 from tkinter_test_util import runner
 
@@ -54,9 +55,10 @@ def set_input_text(text: str) -> runner.Scenario:
     return [set_input_text_action]
 
 
+@dataclass
 class OutputText:
     """Object to store the value of the output text box."""
-    result: str
+    result: str = ""
 
 
 def get_output_text(obj: OutputText) -> runner.Scenario:
